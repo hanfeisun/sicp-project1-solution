@@ -122,6 +122,15 @@
       0))
 
 "Problem 9: Calling the right function"
+(define (decompose x)
+  (if (pair? x)
+      (let ((operator (car x))
+            (expanded-x (map decompose x)))
+        (let decompose-helper ((operands (cdr expanded-x)))
+          (if (<= (length operands) 2)   
+              (cons operator operands)
+              (list operator (car operands) (decompose-helper (cdr operands))))))
+      x))
 
 
 (define (derivative expr wrt)
@@ -153,18 +162,6 @@
 ; Additional test cases for 'derivative' go here.
 
 
-(define (expand x)
-  (if (list? x) (decompose x) x))
 
-(define (decompose x)
-  (if (pair? x)
-      (let ((operator (car x))
-            (expanded-x (map expand x)))
-        (let decompose-helper ((operands (cdr expanded-x)))
-          (if (<= (length operands) 2)   
-              (cons operator operands)
-              (list operator (car operands) (decompose-helper (cdr operands))))))
-      x))
-            
 
 (provide bitfunc bitfunc-rect approx-pi better-pi derivative)

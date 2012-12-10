@@ -24,7 +24,9 @@
 (check-equal? (derivative '(+ y x) 'x) '(+ 0 1))
 (check-equal? (derivative '(+ x x) 'x) '(+ 1 1))
 (check-equal? (derivative '(* 1 x) 'x) '(+ (* 1 1) (* 0 x)))
+(check-equal? (derivative '(+ 1 (* 2 x)) 'x) '(+ 0 (+ (* 2 1) (* 0 x))))
 (check-equal? (derivative '(* x 4 3) 'x) '(+ (* x (+ (* 4 0) (* 0 3))) (* 1 (* 4 3))))
+
 (check-equal? (derivative '(* x (+ 4 3) x (+ 1 5)) 'x) 
               '(+ (* x (+ (* (+ 4 3) (+ (* x (+ 0 0)) (* 1 (+ 1 5))))
                           (* (+ 0 0) (* x (+ 1 5)))))
