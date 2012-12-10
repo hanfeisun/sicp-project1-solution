@@ -19,9 +19,9 @@
 "Problem 3: Integrating Bitdiddle's function"
 
 (define (bitfunc-integral-recur num-steps x1 x2)
-  (let ([step-width (/ (- x2 x1) num-steps)])    
+  (let ((step-width (/ (- x2 x1) num-steps)))    
     (define (recr current-x)
-      (let ([next-x (+ current-x step-width)])
+      (let ((next-x (+ current-x step-width)))
         (if (>= current-x x2) 
             0
             (+ (bitfunc-rect current-x next-x)
@@ -30,9 +30,9 @@
 
 
 (define (bitfunc-integral-iter num-steps x1 x2) 
-  (let ([step-width (/ (- x2 x1) num-steps)])      
+  (let ((step-width (/ (- x2 x1) num-steps)))      
     (define (iter current-integral current-x)
-      (let ([next-x (+ current-x step-width)])
+      (let ((next-x (+ current-x step-width)))
         (if (>= current-x x2) 
             current-integral 
             (iter (+ current-integral 
@@ -48,9 +48,9 @@
      (- x2 x1)))
 
 (define (integral func num-steps x1 x2)
-  (let ([step-width (/ (- x2 x1) num-steps)])     
+  (let ((step-width (/ (- x2 x1) num-steps)))     
     (define (iter current-integral current-x)
-      (let ([next-x (+ current-x step-width)])
+      (let ((next-x (+ current-x step-width)))
         (if (>= current-x x2) 
             current-integral
             (iter (+ current-integral 
@@ -78,9 +78,9 @@
      2))
 
 (define (integral-with piece func num-steps x1 x2)
-  (let ([step-width (/ (- x2 x1) num-steps)])     
+  (let ((step-width (/ (- x2 x1) num-steps)))     
     (define (iter current-integral current-x)
-      (let ([next-x (+ current-x step-width)])
+      (let ((next-x (+ current-x step-width)))
         (if (>= current-x x2) 
             current-integral
             (iter (+ current-integral 
@@ -125,12 +125,12 @@
 
 
 (define (derivative expr wrt)
-  (let ([e (decompose expr)])
-        (cond [(number? e) (deriv-constant e wrt)]
-              [(variable? e) (deriv-variable e wrt)]
-              [(sum? e) (deriv-sum e wrt)]
-              [(product? e) (deriv-product e wrt)]
-              [else (error "Don't know how to differentiate" expr)])))
+  (let ((e (decompose expr)))
+        (cond ((number? e) (deriv-constant e wrt))
+              ((variable? e) (deriv-variable e wrt))
+              ((sum? e) (deriv-sum e wrt))
+              ((product? e) (deriv-product e wrt))
+              (else (error "Don't know how to differentiate" expr)))))
 
 
 "Problem 10: Derivative of a sum"
@@ -152,20 +152,19 @@
 
 ; Additional test cases for 'derivative' go here.
 
-(define (all-but-last l) (reverse (cdr (reverse l))))
+
+(define (expand x)
+  (if (list? x) (decompose x) x))
 
 (define (decompose x)
-  (cond [(number? x) x]
-        [(symbol? x) x]
-        [(pair? x)
-         (let ([operator (car x)]
-               [operands (cdr x)])
-           (if (<= (length operands) 2) x
-               (foldr (lambda (v l) 
-                        (list operator (decompose v) (decompose l)))
-                      (last operands) 
-                      (all-but-last operands))))]))
-
-
+  (if (pair? x)
+      (let ((operator (car x))
+            (expanded-x (map expand x)))
+        (let decompose-helper ((operands (cdr expanded-x)))
+          (if (<= (length operands) 2)   
+              (cons operator operands)
+              (list operator (car operands) (decompose-helper (cdr operands))))))
+      x))
+            
 
 (provide bitfunc bitfunc-rect approx-pi better-pi derivative)
